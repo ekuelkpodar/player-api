@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Player by ID</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Player API</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="fetch-all.html">Fetch All</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="fetch-by-id.html">Fetch by ID</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <h1>Fetch Player by ID</h1>
+    <form id="fetchByIdForm">
+        <div class="form-group">
+            <label for="playerId">Player ID</label>
+            <input type="number" class="form-control" id="playerId" placeholder="Enter player ID">
+        </div>
+        <button type="submit" class="btn btn-primary">Fetch Player</button>
+    </form>
+    <div class="result">
+        <h2>Player Details</h2>
+        <p id="playerDetails"></p>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#fetchByIdForm').submit(function(event) {
+            event.preventDefault();
+            var playerId = $('#playerId').val();
+            fetchPlayerById(playerId);
+        });
+
+        function fetchPlayerById(id) {
+            $.ajax({
+                url: '/api/players/' + id,
+                method: 'GET',
+                success: function(player) {
+                    $('#playerDetails').html(`
+                            <strong>ID:</strong> ${player.id}<br>
+                            <strong>First Name:</strong> ${player.firstName}<br>
+                            <strong>Last Name:</strong> ${player.lastName}<br>
+                            <strong>Team:</strong> ${player.team}<br>
+                            <strong>Position:</strong> ${player.position}
+                        `);
+                },
+                error: function() {
+                    $('#playerDetails').html('Player not found.');
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
